@@ -4,11 +4,10 @@ import time
 from datetime import datetime
 from plyer import notification
 import threading
-import pytz  # For timezone handling
+import pytz  # timezone handling
 
-st.title("🔔 Water Reminder Setup")
+st.title("Water Reminder Setup")
 
-# Get current IST time
 india_tz = pytz.timezone("Asia/Kolkata")
 current_time_ist = datetime.now(india_tz)
 current_hour = current_time_ist.hour
@@ -19,7 +18,7 @@ WATER_GOAL_LITERS = st.number_input("Enter your water goal (liters):", min_value
 FREQUENCY_MINUTES = st.slider("Remind every (minutes):", 15, 180, 60)
 
 START_HOUR = current_hour
-END_HOUR = min(current_hour + 10, 23)  # e.g., next 10 hours or until 11 PM
+END_HOUR = min(current_hour + 10, 23)  
 
 total_hours = END_HOUR - START_HOUR
 total_reminders = max(1, (total_hours * 60) // FREQUENCY_MINUTES)
@@ -28,7 +27,7 @@ amount_per_reminder = WATER_GOAL_LITERS / total_reminders
 def send_reminder():
     now = datetime.now(india_tz).strftime('%H:%M')
     notification.notify(
-        title="💧 Time to Drink Water!",
+        title="Time to Drink Water!",
         message=f"It's {now}. Drink ~{amount_per_reminder:.2f} liters of water.",
         timeout=10
     )
@@ -48,4 +47,4 @@ def run_scheduler():
 if st.button("Start Reminders"):
     start_schedule()
     threading.Thread(target=run_scheduler).start()
-    st.success("✅ Reminders scheduled!")
+    st.success("Reminders scheduled!")
